@@ -1,0 +1,45 @@
+{
+  "name": "generate-git",
+  "description": "Generate a vanilla node.js project.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/generate-git",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/generate-git",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/generate-git/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "utils.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "component-emitter": "^1.2.0",
+    "expand-args": "^0.3.0",
+    "gitty": "^3.2.3",
+    "lazy-cache": "^0.2.4",
+    "matched": "^0.3.2",
+    "minimist": "^1.2.0",
+    "parse-gitignore": "^0.2.0",
+    "question-cache": "^0.3.3",
+    "success-symbol": "^0.1.0",
+    "warning-symbol": "^0.1.0"
+  },
+  "keywords": [
+    "generate",
+    "git"
+  ],
+  "verb": {
+    "related": {
+      "list": []
+    }
+  }
+}
