@@ -24,10 +24,8 @@ require = utils;
  * Lazily required module dependencies
  */
 
-require('expand-args');
 require('gitty');
 require('matched', 'glob');
-require('minimist');
 require('parse-gitignore', 'gitignore');
 require('question-cache', 'Questions');
 require('success-symbol', 'success');

@@ -1,26 +1,15 @@
 'use strict';
 
-var argv = require('minimist')(process.argv.slice(2));
 var utils = require('./utils');
 var gitty = require('./');
 
 module.exports = function(app, base, env) {
-  var args = utils.expandArgs(argv);
-
-  if (args.init) {
-    args.force = true;
-  }
   app.task('default', function(cb) {
-    gitInit(args, cb);
+    gitInit(cb);
   });
 };
 
-function gitInit(options, cb) {
-  if (typeof options === 'function') {
-    cb = options;
-    options = {};
-  }
-
+function gitInit(cb) {
   var questions = new utils.Questions();
   questions.set('init', {
     message: 'Do you want to initialize a git repository?'
@@ -30,7 +19,7 @@ function gitInit(options, cb) {
     if (err) return cb(err);
 
     if (!truthy(answer.init)) {
-      console.log(utils.cyan('skipping git init'));
+      console.log(utils.chalk.cyan('skipping git init'));
       return cb();
     }
 
@@ -57,7 +46,6 @@ function gitInit(options, cb) {
       if (exists) {
         warn('already exists.');
       } else {
-      console.log(arguments)
         ok('done!');
       }
       cb();
@@ -66,7 +54,7 @@ function gitInit(options, cb) {
 }
 
 function truthy(val) {
-  return /^y|yes|ok|true$/i.test(String(val));
+  return /^(y|yes|ok|true)$/i.test(String(val));
 }
 
 function warn(msg) {

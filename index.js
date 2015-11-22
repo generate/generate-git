@@ -83,7 +83,7 @@ module.exports = function(cwd, options) {
   };
 
   return git;
-}
+};
 
 function files(dir, cb) {
   var ignore = utils.gitignore(path.join(dir, '.gitignore'));

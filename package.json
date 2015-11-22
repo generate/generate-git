@@ -23,11 +23,9 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "component-emitter": "^1.2.0",
-    "expand-args": "^0.3.0",
     "gitty": "^3.2.3",
     "lazy-cache": "^0.2.4",
     "matched": "^0.3.2",
-    "minimist": "^1.2.0",
     "parse-gitignore": "^0.2.0",
     "question-cache": "^0.3.3",
     "success-symbol": "^0.1.0",
