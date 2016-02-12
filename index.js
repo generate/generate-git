@@ -9,8 +9,8 @@
 
 var fs = require('fs');
 var path = require('path');
-var utils = require('./utils');
 var Emitter = require('component-emitter');
+var utils = require('./utils');
 
 /**
  * Expose `git`
@@ -91,6 +91,17 @@ function files(dir, cb) {
   var opts = { cwd: dir, ignore: ignore, dot: true };
   utils.glob('*', opts, function(err, files) {
     if (err) return cb(err);
+
+    if (files.length === 0) {
+      var heading = '# ' + path.basename(dir) + '\n\n';
+      heading += '> Project description here!';
+      return fs.writeFile('readme.md', heading, function(err) {
+        if (err) return cb(err);
+
+        return cb(null, ['readme.md']);
+      });
+    }
+
     cb(null, files);
   });
 }

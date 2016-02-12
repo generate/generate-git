@@ -22,34 +22,37 @@ function gitInit(cb) {
       console.log(utils.chalk.cyan('skipping git init'));
       return cb();
     }
+    init(cb);
+  });
+}
 
-    var git = gitty(process.cwd());
+function init(cb) {
+  var git = gitty(process.cwd());
 
-    git.on('exists', function(msg) {
-      warn('.git/', utils.chalk.yellow(msg));
-    });
+  git.on('exists', function(msg) {
+    warn('.git/', utils.chalk.yellow(msg));
+  });
 
-    git.on('init', function(msg) {
-      ok('.git/', msg);
-    });
+  git.on('init', function(msg) {
+    ok('.git/', msg);
+  });
 
-    git.on('add', function(files) {
-      ok('added files:', files.join(', '));
-    });
+  git.on('add', function(files) {
+    ok('added files:', '\n- ' + files.join('\n- '));
+  });
 
-    git.on('commit', function(data) {
-      ok('commit message:', data);
-    });
+  git.on('commit', function(data) {
+    ok('commit message:', data);
+  });
 
-    git.quickstart(function(err, exists) {
-      if (err) return cb(err);
-      if (exists) {
-        warn('already exists.');
-      } else {
-        ok('done!');
-      }
-      cb();
-    });
+  git.quickstart(function(err, exists) {
+    if (err) return cb(err);
+    if (exists) {
+      warn('already exists.');
+    } else {
+      ok('done!');
+    }
+    cb();
   });
 }
 
