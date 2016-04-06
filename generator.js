@@ -1,33 +1,35 @@
 'use strict';
 
 var utils = require('./utils');
-var gitty = require('./');
+var gitInit = require('./git');
 
-module.exports = function(app, base, env) {
-  app.task('default', function(cb) {
-    gitInit(cb);
+module.exports = function(app) {
+  app.task('git', function(cb) {
+    firstCommit(cb);
   });
+
+  app.task('ask', function(cb) {
+    app.question('git', 'Do you want to create a git repository?', {
+      type: 'confirm',
+      save: false
+    });
+
+    app.ask('git', function(err, answers) {
+      if (err) return cb(err);
+      if (answers.git === true) {
+        firstCommit(cb);
+      } else {
+        utils.log.info('skipping first commit');
+        cb();
+      }
+    });
+  });
+
+  app.task('default', ['git']);
 };
 
-function gitInit(cb) {
-  var questions = new utils.Questions();
-  questions.set('init', {
-    message: 'Do you want to initialize a git repository?'
-  });
-
-  questions.ask('init', function(err, answer) {
-    if (err) return cb(err);
-
-    if (!truthy(answer.init)) {
-      console.log(utils.chalk.cyan('skipping git init'));
-      return cb();
-    }
-    init(cb);
-  });
-}
-
-function init(cb) {
-  var git = gitty(process.cwd());
+function firstCommit(cb) {
+  var git = gitInit(process.cwd());
 
   git.on('exists', function(msg) {
     warn('.git/', utils.chalk.yellow(msg));
@@ -54,10 +56,6 @@ function init(cb) {
     }
     cb();
   });
-}
-
-function truthy(val) {
-  return /^(y|yes|ok|true)$/i.test(String(val));
 }
 
 function warn(msg) {
