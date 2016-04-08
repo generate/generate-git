@@ -1,22 +1,6 @@
 'use strict';
 
-/**
- * Module dependencies
- */
-
 var utils = require('lazy-cache')(require);
-
-/**
- * Temporarily re-assign `require` to trick browserify and
- * webpack into reconizing lazy dependencies.
- *
- * This tiny bit of ugliness has the huge dual advantage of
- * only loading modules that are actually called at some
- * point in the lifecycle of the application, whilst also
- * allowing browserify and webpack to find modules that
- * are depended on but never actually called.
- */
-
 var fn = require;
 require = utils;
 
@@ -24,19 +8,40 @@ require = utils;
  * Lazily required module dependencies
  */
 
+require('base-task-prompts', 'prompts');
+require('camel-case', 'camelcase');
 require('gitty');
-require('matched', 'glob');
-require('parse-gitignore', 'gitignore');
-require('question-cache', 'Questions');
-require('success-symbol', 'success');
-require('warning-symbol', 'warning');
-require('chalk');
-
-/**
- * Restore `require`
- */
-
+require('log-utils', 'log');
 require = fn;
+
+utils.firstCommit = function(cwd, msg, cb) {
+  if (typeof cwd === 'function') {
+    cb = cwd;
+    msg = 'first commit';
+    cwd = process.cwd();
+  }
+
+  if (typeof msg === 'function') {
+    cb = msg;
+    msg = 'first commit';
+  }
+
+  if (typeof cb !== 'function') {
+    throw new TypeError('expected a callback function');
+  }
+
+  var git = utils.gitty(cwd);
+
+  git.init(function(err) {
+    if (err) return cb(err);
+
+    git.add(['.'], function(err, files) {
+      if (err) return cb(err);
+
+      git.commit(msg, cb);
+    });
+  });
+};
 
 /**
  * Expose `utils` modules
