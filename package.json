@@ -1,7 +1,7 @@
 {
   "name": "generate-git",
   "description": "Generator for initializing a git repository and adding first commit.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/generate/generate-git",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "generate/generate-git",
@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "files": [
+    "generator.js",
     "index.js",
     "utils.js"
   ],
