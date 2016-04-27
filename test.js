@@ -9,8 +9,10 @@ var del = require('delete');
 var generator = require('./');
 var app;
 
+var cwd = path.resolve.bind(path, __dirname, 'actual');
+
 function exists(name, cb) {
-  var filepath = path.resolve(__dirname, 'actual', name);
+  var filepath = cwd(name);
 
   return function(err) {
     if (err) return cb(err);
@@ -25,8 +27,8 @@ function exists(name, cb) {
 describe('generate-git', function() {
   beforeEach(function() {
     app = generate({cli: true, silent: true});
-
-    app.option('dest', path.resolve(__dirname, 'actual'));
+    app.cwd = cwd();
+    app.option('dest', cwd());
     app.option('askWhen', 'not-answered');
     app.data('author.name', 'Jon Schlinkert');
   });
@@ -57,17 +59,17 @@ describe('generate-git', function() {
 
     it('should work as a generator', function(cb) {
       app.register('git', generator);
-      app.generate('git', exists('LICENSE', cb));
+      app.generate('git', exists('.git', cb));
     });
 
     it('should run the `default` task', function(cb) {
       app.register('git', generator);
-      app.generate('git:default', exists('LICENSE', cb));
+      app.generate('git:default', exists('.git', cb));
     });
 
     it('should run the `fc` task', function(cb) {
       app.register('git', generator);
-      app.generate('git:fc', exists('LICENSE', cb));
+      app.generate('git:fc', exists('.git', cb));
     });
   });
 });
