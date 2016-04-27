@@ -22,7 +22,7 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.task('first-commit', ['fc']);
+  app.task('first-commit', { silent: true }, ['fc']);
   app.task('fc', function(cb) {
     app.option(base.options);
     var dest = app.option('dest') || app.cwd;
