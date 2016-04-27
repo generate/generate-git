@@ -24,6 +24,7 @@ module.exports = function(app) {
 
   app.task('first-commit', ['fc']);
   app.task('fc', function(cb) {
+    console.log(app.cwd)
     utils.firstCommit(app.cwd, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
         cb(err);
