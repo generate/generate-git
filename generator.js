@@ -22,11 +22,10 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.task('first-commit', { silent: true }, ['fc']);
+  app.task('first-commit', ['fc']);
   app.task('fc', function(cb) {
-    app.option(base.options);
-    var dest = app.option('dest') || app.cwd;
-    utils.firstCommit(dest, 'first commit', function(err) {
+    console.log(app.cwd);
+    utils.firstCommit(app.cwd, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
         cb(err);
       } else {
@@ -47,7 +46,7 @@ module.exports = function(app, base) {
    */
 
   app.confirm('git', 'Want to initialize a git repository?');
-  app.task('prompt-git', prompts.confirm('git', ['first-commit']));
+  app.task('prompt-git', prompts.confirm('git', ['fc']));
 
   /**
    * Alias for the `first-commit` task to allow running the generator
@@ -61,5 +60,5 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.task('default', ['first-commit']);
+  app.task('default', ['fc']);
 };
