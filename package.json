@@ -26,11 +26,13 @@
     "debug": "^2.2.0",
     "gitty": "^3.3.4",
     "lazy-cache": "^1.0.3",
-    "log-utils": "^0.1.0"
+    "log-utils": "^0.1.0",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "delete": "^0.3.0",
     "generate": "^0.5.4",
+    "gulp-format-md": "^0.1.9",
     "mocha": "^2.4.5"
   },
   "keywords": [
@@ -40,6 +42,21 @@
   "verb": {
     "related": {
       "list": []
-    }
+    },
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "lint": {
+      "reflinks": true
+    },
+    "reflinks": [
+      "generate",
+      "verb"
+    ]
   }
 }
