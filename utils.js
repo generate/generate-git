@@ -13,6 +13,7 @@ require('base-task-prompts', 'prompts');
 require('camel-case', 'camelcase');
 require('gitty');
 require('log-utils', 'log');
+require('mkdirp');
 require = fn;
 
 /**
@@ -37,7 +38,7 @@ utils.firstCommit = function(cwd, msg, cb) {
   if (typeof cwd === 'function') {
     cb = cwd;
     msg = 'first commit';
-    cwd = process.cwd();
+    cwd = null;
   }
 
   if (typeof msg === 'function') {
@@ -49,15 +50,20 @@ utils.firstCommit = function(cwd, msg, cb) {
     throw new TypeError('expected a callback function');
   }
 
-  var git = utils.gitty(cwd);
-
-  git.init(function(err) {
+  cwd = cwd || process.cwd();
+  utils.mkdirp(cwd, function(err) {
     if (err) return cb(err);
 
-    git.add(['.'], function(err, files) {
+    var git = utils.gitty(cwd);
+
+    git.init(function(err) {
       if (err) return cb(err);
 
-      git.commit(msg, cb);
+      git.add(['.'], function(err, files) {
+        if (err) return cb(err);
+
+        git.commit(msg, cb);
+      });
     });
   });
 };

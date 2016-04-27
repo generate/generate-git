@@ -2,7 +2,7 @@
 
 var utils = require('./utils');
 
-module.exports = function(app) {
+module.exports = function(app, base) {
   if (utils.isRegistered(app, 'git')) return;
   var prompts = utils.prompts(app);
 
@@ -24,8 +24,9 @@ module.exports = function(app) {
 
   app.task('first-commit', ['fc']);
   app.task('fc', function(cb) {
-    console.log(app.base.cwd)
-    utils.firstCommit(app.cwd, 'first commit', function(err) {
+    app.option(base.options);
+    var dest = app.option('dest') || app.cwd;
+    utils.firstCommit(dest, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
         cb(err);
       } else {
