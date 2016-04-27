@@ -18,6 +18,7 @@ function exists(name, cb) {
     if (err) return cb(err);
 
     fs.stat(filepath, function(err, stat) {
+      console.log(err);
       assert(stat);
       del(path.dirname(filepath), cb);
     });
