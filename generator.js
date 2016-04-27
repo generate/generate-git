@@ -3,9 +3,27 @@
 var utils = require('./utils');
 
 module.exports = function(app) {
+  if (utils.isRegistered(app, 'git')) return;
   var prompts = utils.prompts(app);
 
-  app.task('git', function(cb) {
+  if (typeof app.ask === 'undefined') {
+    throw new Error('expected the base-questions plugin to be registered');
+  }
+
+  /**
+   * Initialize a git repository, including `git add` and first commit.
+   *
+   * ```sh
+   * $ gen git:fc
+   * # or
+   * $ gen git:first-commit
+   * ```
+   * @name first-commit
+   * @api public
+   */
+
+  app.task('first-commit', ['fc']);
+  app.task('fc', function(cb) {
     utils.firstCommit(app.cwd, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
         cb(err);
@@ -15,7 +33,31 @@ module.exports = function(app) {
     });
   });
 
+  /**
+   * Prompt the user to initialize a git repository and create a first commit.
+   * Runs the [first-commit](#first-commit) task.
+   *
+   * ```sh
+   * $ gen node:prompt-git
+   * ```
+   * @name git
+   * @api public
+   */
+
   app.confirm('git', 'Want to initialize a git repository?');
-  app.task('ask', prompts.confirm('git', ['git']));
-  app.task('default', ['git']);
+  app.task('prompt-git', prompts.confirm('git', ['first-commit']));
+
+  /**
+   * Alias for the `first-commit` task to allow running the generator
+   * with the following command (using aliases like this makes it easy for
+   * other generators to call a specific task on this generator):
+   *
+   * ```sh
+   * $ gen git
+   * ```
+   * @name default
+   * @api public
+   */
+
+  app.task('default', ['first-commit']);
 };
