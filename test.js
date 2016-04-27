@@ -51,7 +51,8 @@ describe('generate-git', function() {
     it('should work as a plugin', function() {
       app.use(generator);
       assert(app.tasks.hasOwnProperty('default'));
-      assert(app.tasks.hasOwnProperty('mit'));
+      assert(app.tasks.hasOwnProperty('first-commit'));
+      assert(app.tasks.hasOwnProperty('fc'));
     });
 
     it('should work as a generator', function(cb) {
@@ -64,9 +65,9 @@ describe('generate-git', function() {
       app.generate('git:default', exists('LICENSE', cb));
     });
 
-    it('should run the `mit` task', function(cb) {
+    it('should run the `fc` task', function(cb) {
       app.register('git', generator);
-      app.generate('git:mit', exists('LICENSE', cb));
+      app.generate('git:fc', exists('LICENSE', cb));
     });
   });
 });
