@@ -28,7 +28,6 @@ describe('generate-git', function() {
   beforeEach(function() {
     app = generate({cli: true, silent: true});
     app.cwd = cwd();
-    console.log(app.cwd)
     app.option('dest', cwd());
     app.option('askWhen', 'not-answered');
     app.data('author.name', 'Jon Schlinkert');
