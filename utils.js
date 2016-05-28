@@ -9,9 +9,12 @@ require = utils;
  * Lazily required module dependencies
  */
 
+require('base-questions', 'questions');
 require('base-task-prompts', 'prompts');
 require('camel-case', 'camelcase');
 require('gitty');
+require('is-registered');
+require('is-valid-instance');
 require('log-utils', 'log');
 require('mkdirp');
 require = fn;
@@ -20,14 +23,15 @@ require = fn;
  * Returns true if the generator is registered already
  */
 
-utils.isRegistered = function(app, name) {
-  if (!app.isApp && !app.isGenerator) {
-    return true;
+utils.isValid = function(app) {
+  if (!utils.isValidInstance(app)) {
+    return false;
   }
-  if (app.isRegistered('generate-' + name)) {
-    return true;
+  if (utils.isRegistered(app, 'generate-git')) {
+    return false;
   }
   debug('initializing <%s>, from <%s>', __filename, module.parent.id);
+  return true;
 };
 
 /**

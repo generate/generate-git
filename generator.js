@@ -3,27 +3,26 @@
 var utils = require('./utils');
 
 module.exports = function(app, base) {
-  if (utils.isRegistered(app, 'git')) return;
-  var prompts = utils.prompts(app);
+  if (!utils.isValid(app)) return;
+  app.use(utils.questions());
 
-  if (typeof app.ask === 'undefined') {
-    throw new Error('expected the base-questions plugin to be registered');
-  }
+  /**
+   * Register `base-task-prompts`
+   */
+
+  var prompts = utils.prompts(app);
 
   /**
    * Initialize a git repository, including `git add` and first commit.
    *
    * ```sh
-   * $ gen git:fc
-   * # or
    * $ gen git:first-commit
    * ```
    * @name first-commit
    * @api public
    */
 
-  app.task('first-commit', ['fc']);
-  app.task('fc', function(cb) {
+  app.task('first-commit', function(cb) {
     app.option(base.options);
     var cwd = app.options.dest || base.cwd;
     utils.firstCommit(cwd, 'first commit', function(err) {
@@ -47,7 +46,7 @@ module.exports = function(app, base) {
    */
 
   app.confirm('git', 'Want to initialize a git repository?');
-  app.task('prompt-git', prompts.confirm('git', ['fc']));
+  app.task('prompt-git', prompts.confirm('git', ['first-commit']));
 
   /**
    * Alias for the `first-commit` task to allow running the generator
@@ -61,5 +60,5 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.task('default', ['fc']);
+  app.task('default', ['first-commit']);
 };

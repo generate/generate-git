@@ -54,7 +54,6 @@ describe('generate-git', function() {
       app.use(generator);
       assert(app.tasks.hasOwnProperty('default'));
       assert(app.tasks.hasOwnProperty('first-commit'));
-      assert(app.tasks.hasOwnProperty('fc'));
     });
 
     it('should work as a generator', function(cb) {
@@ -67,9 +66,9 @@ describe('generate-git', function() {
       app.generate('git:default', exists('.git', cb));
     });
 
-    it('should run the `fc` task', function(cb) {
+    it('should run the `first-commit` task', function(cb) {
       app.register('git', generator);
-      app.generate('git:fc', exists('.git', cb));
+      app.generate('git:first-commit', exists('.git', cb));
     });
   });
 });
