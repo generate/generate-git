@@ -1,6 +1,5 @@
 'use strict';
 
-var debug = require('debug')('generate:git');
 var utils = require('lazy-cache')(require);
 var fn = require;
 require = utils;
@@ -12,27 +11,12 @@ require = utils;
 require('base-questions', 'questions');
 require('base-task-prompts', 'prompts');
 require('camel-case', 'camelcase');
+require('fs-exists-sync', 'exists');
 require('gitty');
-require('is-registered');
-require('is-valid-instance');
+require('is-valid-app', 'isValid');
 require('log-utils', 'log');
 require('mkdirp');
 require = fn;
-
-/**
- * Returns true if the generator is registered already
- */
-
-utils.isValid = function(app) {
-  if (!utils.isValidInstance(app)) {
-    return false;
-  }
-  if (utils.isRegistered(app, 'generate-git')) {
-    return false;
-  }
-  debug('initializing <%s>, from <%s>', __filename, module.parent.id);
-  return true;
-};
 
 /**
  * Add a first commit to a git repository

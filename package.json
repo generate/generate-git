@@ -25,19 +25,18 @@
     "base-questions": "^0.6.6",
     "base-task-prompts": "^0.1.0",
     "camel-case": "^1.2.2",
-    "debug": "^2.2.0",
+    "fs-exists-sync": "^0.1.0",
     "gitty": "^3.3.5",
-    "is-registered": "^0.1.4",
-    "is-valid-instance": "^0.1.0",
+    "is-valid-app": "^0.1.0",
     "lazy-cache": "^2.0.1",
     "log-utils": "^0.1.4",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "delete": "^0.3.0",
-    "generate": "^0.5.4",
+    "delete": "^0.3.2",
+    "generate": "^0.7.1",
     "gulp-format-md": "^0.1.9",
-    "mocha": "^2.4.5"
+    "mocha": "^2.5.3"
   },
   "keywords": [
     "app",
@@ -92,7 +91,8 @@
     },
     "reflinks": [
       "generate",
-      "verb"
+      "verb",
+      "verb-readme-generator"
     ],
     "lint": {
       "reflinks": true
