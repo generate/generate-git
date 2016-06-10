@@ -1,13 +1,14 @@
 'use strict';
 
+var path = require('path');
 var utils = require('./utils');
 
 module.exports = function(app, base) {
-  if (!utils.isValid(app)) return;
-  app.use(utils.questions());
+  if (!utils.isValid(app, 'generate-git')) return;
+  var cwd = path.resolve.bind(path, app.options.dest || app.cwd);
 
   /**
-   * Register `base-task-prompts`
+   * Load `base-task-prompts`
    */
 
   var prompts = utils.prompts(app);
@@ -18,30 +19,34 @@ module.exports = function(app, base) {
    * ```sh
    * $ gen git:first-commit
    * ```
-   * @name first-commit
+   * @name git:first-commit
    * @api public
    */
 
-  app.task('first-commit', function(cb) {
-    app.option(base.options);
-    var cwd = app.options.dest || base.cwd;
-    utils.firstCommit(cwd, 'first commit', function(err) {
+  app.task('first-commit', function(next) {
+    if (utils.exists(cwd('.git'))) {
+      next();
+      return;
+    }
+
+    utils.firstCommit(cwd(), 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
-        cb(err);
+        next(err);
       } else {
-        cb();
+        next();
       }
     });
   });
 
   /**
-   * Prompt the user to initialize a git repository and create a first commit.
-   * Runs the [first-commit](#first-commit) task.
+   * Prompt the user to initialize a git repository and create a first commit,
+   * conditionally runs the [first-commit](#first-commit) task if specified
+   * by the user.
    *
    * ```sh
-   * $ gen node:prompt-git
+   * $ gen git:prompt-git
    * ```
-   * @name git
+   * @name git:prompt-git
    * @api public
    */
 
@@ -49,9 +54,8 @@ module.exports = function(app, base) {
   app.task('prompt-git', prompts.confirm('git', ['first-commit']));
 
   /**
-   * Alias for the `first-commit` task to allow running the generator
-   * with the following command (using aliases like this makes it easy for
-   * other generators to call a specific task on this generator):
+   * Alias for the `git:first-commit` task to allow running the generator
+   * with the following command:
    *
    * ```sh
    * $ gen git
