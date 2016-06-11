@@ -88,6 +88,8 @@ If you do not see one or both of those events, please [let us know about it](../
 
 ### Tasks
 
+The following tasks are registered on the `git` generator.
+
 #### [git:first-commit](generator.js#L26)
 
 Initialize a git repository, including `git add` and first commit.
