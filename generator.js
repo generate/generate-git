@@ -64,6 +64,7 @@ module.exports = function(app, base) {
   app.task('first-commit', function(next) {
     var dest = app.option('dest') || app.cwd;
     if (utils.exists(path.resolve(dest, '.git'))) {
+      app.log.warn('.git exists, skipping');
       next();
       return;
     }
@@ -72,6 +73,7 @@ module.exports = function(app, base) {
       if (err && !/Command failed/.test(err.message)) {
         next(err);
       } else {
+        app.log.success('first commit');
         next();
       }
     });
