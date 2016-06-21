@@ -6,6 +6,39 @@ var utils = require('./utils');
 module.exports = function(app, base) {
   if (!utils.isValid(app, 'generate-git')) return;
   var cwd = path.resolve.bind(path, app.options.dest || app.cwd);
+  var templates = path.resolve(__dirname, 'templates');
+
+  /**
+   * Generate a `.gitattributes` file. You can override the default template by adding
+   * a custom template at the following path `~/templates/_gitattributes` (in user home).
+   *
+   * ```sh
+   * $ gen git:gitattributes
+   * ```
+   * @name git:gitattributes
+   * @api public
+   */
+
+  app.templates('_gitattributes', {cwd: templates, renameKey: utils.renameKey});
+
+  /**
+   * Generate a `.gitignore` file. You can override the default template by adding
+   * a custom template at the following path: `~/templates/_gitignore` (in user home).
+   *
+   * ```sh
+   * $ gen git:gitignore
+   * ```
+   * @name git:gitignore
+   * @api public
+   */
+
+  app.templates('_gitignore', {cwd: templates, renameKey: utils.renameKey});
+
+  /**
+   * Plugins
+   */
+
+  app.use(utils.file({views: app.views.dotfiles}));
 
   /**
    * Load `base-task-prompts`
@@ -40,8 +73,7 @@ module.exports = function(app, base) {
 
   /**
    * Prompt the user to initialize a git repository and create a first commit,
-   * conditionally runs the [first-commit](#first-commit) task if specified
-   * by the user.
+   * runs the [first-commit](#first-commit) task if specified by the user.
    *
    * ```sh
    * $ gen git:prompt-git

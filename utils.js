@@ -1,5 +1,6 @@
 'use strict';
 
+var path = require('path');
 var utils = require('lazy-cache')(require);
 var fn = require;
 require = utils;
@@ -10,6 +11,7 @@ require = utils;
 
 require('base-questions', 'questions');
 require('base-task-prompts', 'prompts');
+require('generate-file', 'file');
 require('camel-case', 'camelcase');
 require('fs-exists-sync', 'exists');
 require('gitty');
@@ -17,6 +19,12 @@ require('is-valid-app', 'isValid');
 require('log-utils', 'log');
 require('mkdirp');
 require = fn;
+
+
+utils.renameKey = function(key, file) {
+  var name = file ? file.stem : path.basename(key, path.extname(key));
+  return name.slice(1);
+};
 
 /**
  * Add a first commit to a git repository

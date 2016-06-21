@@ -54,6 +54,8 @@ describe('generate-git', function() {
       app.use(generator);
       assert(app.tasks.hasOwnProperty('default'));
       assert(app.tasks.hasOwnProperty('first-commit'));
+      assert(app.tasks.hasOwnProperty('gitattributes'));
+      assert(app.tasks.hasOwnProperty('gitignore'));
     });
 
     it('should work as a generator', function(cb) {
