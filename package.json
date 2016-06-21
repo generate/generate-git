@@ -27,7 +27,6 @@
     "base-task-prompts": "^0.1.0",
     "camel-case": "^1.2.2",
     "fs-exists-sync": "^0.1.0",
-    "generate-file": "^0.1.0",
     "gitty": "^3.3.5",
     "is-valid-app": "^0.1.0",
     "lazy-cache": "^2.0.1",

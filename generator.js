@@ -5,8 +5,13 @@ var utils = require('./utils');
 
 module.exports = function(app, base) {
   if (!utils.isValid(app, 'generate-git')) return;
-  var cwd = path.resolve.bind(path, app.options.dest || app.cwd);
-  var templates = path.resolve(__dirname, 'templates');
+  var templates = path.resolve.bind(path, __dirname, 'templates');
+
+  /**
+   * Load `base-task-prompts`
+   */
+
+  var prompts = utils.prompts(app);
 
   /**
    * Generate a `.gitattributes` file. You can override the default template by adding
@@ -19,7 +24,13 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.templates('_gitattributes', {cwd: templates, renameKey: utils.renameKey});
+  app.task('gitattributes', function(cb) {
+    var dest = app.option('dest') || app.cwd;
+    app.template(templates('_gitattributes'));
+    return app.toStream('templates', pickFile(app, '.gitattributes'))
+      .pipe(app.conflicts(dest))
+      .pipe(app.dest(dest));
+  });
 
   /**
    * Generate a `.gitignore` file. You can override the default template by adding
@@ -32,19 +43,13 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.templates('_gitignore', {cwd: templates, renameKey: utils.renameKey});
-
-  /**
-   * Plugins
-   */
-
-  app.use(utils.file({views: app.views.dotfiles}));
-
-  /**
-   * Load `base-task-prompts`
-   */
-
-  var prompts = utils.prompts(app);
+  app.task('gitignore', function(cb) {
+    var dest = app.option('dest') || app.cwd;
+    app.template(templates('_gitignore'));
+    return app.toStream('templates', pickFile(app, '.gitignore'))
+      .pipe(app.conflicts(dest))
+      .pipe(app.dest(dest));
+  });
 
   /**
    * Initialize a git repository, including `git add` and first commit.
@@ -57,12 +62,13 @@ module.exports = function(app, base) {
    */
 
   app.task('first-commit', function(next) {
-    if (utils.exists(cwd('.git'))) {
+    var dest = app.option('dest') || app.cwd;
+    if (utils.exists(path.resolve(dest, '.git'))) {
       next();
       return;
     }
 
-    utils.firstCommit(cwd(), 'first commit', function(err) {
+    utils.firstCommit(dest, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
         next(err);
       } else {
@@ -98,3 +104,14 @@ module.exports = function(app, base) {
 
   app.task('default', ['first-commit']);
 };
+
+/**
+ * Pick the file to render. If the user specifies a `--file`, use that,
+ * otherwise use the default `$package.json` template
+ */
+
+function pickFile(app, fallback) {
+  return function(key, file) {
+    return file.stem === (app.option('file') || fallback);
+  };
+}

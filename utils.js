@@ -11,7 +11,6 @@ require = utils;
 
 require('base-questions', 'questions');
 require('base-task-prompts', 'prompts');
-require('generate-file', 'file');
 require('camel-case', 'camelcase');
 require('fs-exists-sync', 'exists');
 require('gitty');
