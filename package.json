@@ -10,9 +10,9 @@
   },
   "license": "MIT",
   "files": [
-    "generator.js",
     "index.js",
-    "templates",
+    "LICENSE",
+    "README.md",
     "utils.js"
   ],
   "main": "index.js",
@@ -23,14 +23,14 @@
     "test": "mocha"
   },
   "dependencies": {
-    "base-questions": "^0.6.6",
     "base-task-prompts": "^0.1.0",
     "camel-case": "^1.2.2",
     "fs-exists-sync": "^0.1.0",
+    "generate-gitattributes": "^0.1.1",
+    "generate-gitignore": "^0.1.1",
     "gitty": "^3.3.5",
     "is-valid-app": "^0.1.0",
     "lazy-cache": "^2.0.1",
-    "log-utils": "^0.1.4",
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
@@ -57,6 +57,9 @@
     "front-end",
     "frontend",
     "generate",
+    "generate-generator",
+    "generate-plugin",
+    "generategenerator",
     "generateplugin",
     "generator",
     "git",
@@ -95,9 +98,13 @@
       ]
     },
     "reflinks": [
+      "assemble",
+      "base",
       "generate",
+      "gulp",
       "verb",
-      "verb-readme-generator"
+      "verb-readme-generator",
+      "generate-dest"
     ],
     "lint": {
       "reflinks": true

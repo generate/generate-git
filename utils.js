@@ -9,16 +9,13 @@ require = utils;
  * Lazily required module dependencies
  */
 
-require('base-questions', 'questions');
 require('base-task-prompts', 'prompts');
 require('camel-case', 'camelcase');
 require('fs-exists-sync', 'exists');
 require('gitty');
 require('is-valid-app', 'isValid');
-require('log-utils', 'log');
 require('mkdirp');
 require = fn;
-
 
 utils.renameKey = function(key, file) {
   var name = file ? file.stem : path.basename(key, path.extname(key));
