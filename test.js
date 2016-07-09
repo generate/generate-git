@@ -68,6 +68,16 @@ describe('generate-git', function() {
       app.generate('git:default', exists('.git', cb));
     });
 
+    it('should run the `gitignore` task', function(cb) {
+      app.register('git', generator);
+      app.generate('git:gitignore', exists('.gitignore', cb));
+    });
+
+    it('should run the `gitattributes` task', function(cb) {
+      app.register('git', generator);
+      app.generate('git:gitattributes', exists('.gitattributes', cb));
+    });
+
     it('should run the `first-commit` task', function(cb) {
       app.register('git', generator);
       app.generate('git:first-commit', exists('.git', cb));
