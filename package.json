@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "files": [
+    "generator.js",
     "index.js",
     "LICENSE",
     "README.md",
@@ -24,12 +25,12 @@
   },
   "dependencies": {
     "base-task-prompts": "^0.1.0",
-    "camel-case": "^1.2.2",
+    "camel-case": "^3.0.0",
     "fs-exists-sync": "^0.1.0",
     "generate-gitattributes": "^0.1.1",
-    "generate-gitignore": "^0.1.1",
-    "gitty": "^3.3.5",
-    "is-valid-app": "^0.1.0",
+    "generate-gitignore": "^0.1.2",
+    "gitty": "^3.3.6",
+    "is-valid-app": "^0.2.0",
     "lazy-cache": "^2.0.1",
     "mkdirp": "^0.5.1"
   },
@@ -82,7 +83,9 @@
     "yo"
   ],
   "verb": {
-    "toc": false,
+    "toc": {
+      "method": "postWrite"
+    },
     "layout": "generator",
     "tasks": [
       "readme"
@@ -101,10 +104,10 @@
       "assemble",
       "base",
       "generate",
+      "generate-dest",
       "gulp",
       "verb",
-      "verb-readme-generator",
-      "generate-dest"
+      "verb-readme-generator"
     ],
     "lint": {
       "reflinks": true
