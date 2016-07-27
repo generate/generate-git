@@ -84,7 +84,7 @@
   ],
   "verb": {
     "toc": {
-      "method": "postWrite"
+      "method": "preWrite"
     },
     "layout": "generator",
     "tasks": [

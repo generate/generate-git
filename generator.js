@@ -7,13 +7,6 @@ module.exports = function(app, base) {
   if (!utils.isValid(app, 'generate-git')) return;
 
   /**
-   * Plugins
-   */
-
-  app.use(require('generate-gitattributes'));
-  app.use(require('generate-gitignore'));
-
-  /**
    * Load `base-task-prompts`
    */
 
@@ -27,9 +20,11 @@ module.exports = function(app, base) {
    * ```sh
    * $ gen git:gitattributes
    * ```
-   * @name git:gitattributes
+   * @name gitattributes
    * @api public
    */
+
+  app.use(require('generate-gitattributes'));
 
   /**
    * Generate a `.gitignore` file. You can override the default template by adding
@@ -38,29 +33,43 @@ module.exports = function(app, base) {
    * ```sh
    * $ gen git:gitignore
    * ```
-   * @name git:gitignore
+   * @name gitignore
    * @api public
    */
+
+  app.use(require('generate-gitignore'));
 
   /**
    * Initialize a git repository, including `git add` and first commit.
    *
    * ```sh
+   * $ gen git
+   * ```
+   * @name default
+   * @api public
+   */
+
+  app.task('default', {silent: true}, ['first-commit']);
+
+  /**
+   * Alias for the default task, to provide a semantic task name when using this
+   * generator as a plugin or sub-generator.
+   *
+   * ```sh
    * $ gen git:first-commit
    * ```
-   * @name git:first-commit
+   * @name first-commit
    * @api public
    */
 
   app.task('first-commit', function(next) {
-    var dest = app.option('dest') || app.cwd;
-    if (utils.exists(path.resolve(dest, '.git'))) {
+    if (utils.exists(path.resolve(app.cwd, '.git'))) {
       app.log.warn('.git exists, skipping');
       next();
       return;
     }
 
-    utils.firstCommit(dest, 'first commit', function(err) {
+    utils.firstCommit(app.cwd, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
         next(err);
       } else {
@@ -77,23 +86,10 @@ module.exports = function(app, base) {
    * ```sh
    * $ gen git:prompt-git
    * ```
-   * @name git:prompt-git
+   * @name prompt-git
    * @api public
    */
 
   app.confirm('git', 'Want to initialize a git repository?');
   app.task('prompt-git', {silent: true}, prompts.confirm('git', ['first-commit']));
-
-  /**
-   * Alias for the `git:first-commit` task to allow running the generator
-   * with the following command:
-   *
-   * ```sh
-   * $ gen git
-   * ```
-   * @name default
-   * @api public
-   */
-
-  app.task('default', {silent: true}, ['first-commit']);
 };
