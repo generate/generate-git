@@ -1,43 +1,29 @@
 'use strict';
 
+var fs = require('fs');
 var path = require('path');
+var Enquirer = require('enquirer');
+var extend = require('extend-shallow');
 var utils = require('./utils');
 
 module.exports = function(app, base) {
   if (!utils.isValid(app, 'generate-git')) return;
 
   /**
-   * Load `base-task-prompts`
+   * Initialize prompts
    */
 
-  var prompts = utils.prompts(app);
+  var enquirer = new Enquirer();
+  enquirer.register('confirm', require('prompt-confirm'));
 
-  /**
-   * Generate a `.gitattributes` file. You can override the default template by adding
-   * a custom template at the following path `~/templates/_gitattributes` (in user home).
-   * See the [git documentation](https://git-scm.com/docs/gitattributes) for `.gitattributes` files.
-   *
-   * ```sh
-   * $ gen git:gitattributes
-   * ```
-   * @name gitattributes
-   * @api public
-   */
+  enquirer.question('clone', {
+    message: 'Which repo would you like to clone (owner/name)?',
+  });
 
-  app.use(require('generate-gitattributes'));
-
-  /**
-   * Generate a `.gitignore` file. You can override the default template by adding
-   * a custom template at the following path: `~/templates/_gitignore` (in user home).
-   *
-   * ```sh
-   * $ gen git:gitignore
-   * ```
-   * @name gitignore
-   * @api public
-   */
-
-  app.use(require('generate-gitignore'));
+  enquirer.question('first-commit', {
+    message: 'Want to do first git commit?',
+    type: 'confirm'
+  });
 
   /**
    * Initialize a git repository, including `git add` and first commit.
@@ -62,34 +48,75 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.task('first-commit', function(next) {
-    if (utils.exists(path.resolve(app.cwd, '.git'))) {
-      app.log.warn('.git exists, skipping');
-      next();
+  app.task('first-commit', function(cb) {
+    if (fs.existsSync(path.resolve(app.cwd, '.git'))) {
+      app.log.warn(`.git exists, skipping ${this.name} task`);
+      cb();
       return;
     }
 
     utils.firstCommit(app.cwd, 'first commit', function(err) {
       if (err && !/Command failed/.test(err.message)) {
-        next(err);
+        cb(err);
       } else {
         app.log.success('first commit');
-        next();
+        cb();
       }
     });
   });
 
   /**
-   * Prompt the user to initialize a git repository and create a first commit,
-   * runs the [first-commit](#first-commit) task if specified by the user.
+   * Alias for the default task, to provide a semantic task name when using this
+   * generator as a plugin or sub-generator.
    *
    * ```sh
-   * $ gen git:prompt-git
+   * $ gen git:clone
+   * $ gen git:git-clone # aliased for API usage
    * ```
-   * @name prompt-git
+   * @name clone
    * @api public
    */
 
-  app.confirm('git', 'Want to initialize a git repository?');
-  app.task('prompt-git', {silent: true}, prompts.confirm('git', ['first-commit']));
+  app.task('clone', ['prompt-clone']);
+  app.task('prompt-clone', function(cb) {
+    var opts = extend({}, app.options);
+    if (opts.clone) {
+      opts.repo = opts.clone;
+      utils.clone(opts, cb);
+      return;
+    }
+
+    return enquirer.ask('clone')
+      .then(function(answer) {
+        if (answer.clone) {
+          opts.repo = answer.clone;
+          app.log.info('cloning', opts.repo);
+          utils.clone(opts, cb);
+        }
+      });
+
+  });
+
+  /**
+   * Prompts the user to confirm if they'd like to initialize a git repository with
+   * first [first-commit](#first-commit).
+   *
+   * ```sh
+   * $ gen updater:prompt-git
+   * ```
+   * @name updater:prompt-git
+   * @api public
+   */
+
+  app.task('prompt-first-commit', function(cb) {
+    var name = this.name;
+    return enquirer.ask(name)
+      .then(function(answer) {
+        if (answer[name]) {
+          return app.build(name.replace('prompt-', ''), cb);
+        }
+      });
+  });
+
 };
+

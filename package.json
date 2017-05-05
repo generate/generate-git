@@ -12,8 +12,6 @@
   "files": [
     "generator.js",
     "index.js",
-    "LICENSE",
-    "README.md",
     "utils.js"
   ],
   "main": "index.js",
@@ -24,21 +22,23 @@
     "test": "mocha"
   },
   "dependencies": {
-    "base-task-prompts": "^0.1.0",
     "camel-case": "^3.0.0",
-    "fs-exists-sync": "^0.1.0",
-    "generate-gitattributes": "^0.1.1",
-    "generate-gitignore": "^0.1.2",
-    "gitty": "^3.3.6",
-    "is-valid-app": "^0.2.0",
-    "lazy-cache": "^2.0.1",
-    "mkdirp": "^0.5.1"
+    "enquirer": "^0.4.1",
+    "extend-shallow": "^2.0.1",
+    "gh-clone": "^0.5.0",
+    "gitty": "^3.6.0",
+    "is-valid-app": "^0.3.0",
+    "lazy-cache": "^2.0.2",
+    "mkdirp": "^0.5.1",
+    "prompt-confirm": "^0.2.1"
   },
   "devDependencies": {
+    "base": "^0.13.0",
+    "base-task": "^0.7.1",
     "delete": "^0.3.2",
-    "generate": "^0.7.1",
-    "gulp-format-md": "^0.1.9",
-    "mocha": "^2.5.3"
+    "generate": "^0.13.1",
+    "gulp-format-md": "^0.1.12",
+    "mocha": "^3.3.0"
   },
   "keywords": [
     "app",
@@ -82,10 +82,14 @@
     "yeoman",
     "yo"
   ],
+  "lintDeps": {
+    "devDependencies": {
+      "files": [
+        "f*.js"
+      ]
+    }
+  },
   "verb": {
-    "toc": {
-      "method": "preWrite"
-    },
     "layout": "generator",
     "tasks": [
       "readme"

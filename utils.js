@@ -9,11 +9,10 @@ require = utils;
  * Lazily required module dependencies
  */
 
-require('base-task-prompts', 'prompts');
 require('camel-case', 'camelcase');
-require('fs-exists-sync', 'exists');
-require('gitty');
+require('gh-clone', 'clone');
 require('is-valid-app', 'isValid');
+require('gitty');
 require('mkdirp');
 require = fn;
 

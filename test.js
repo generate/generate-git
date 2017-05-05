@@ -9,10 +9,10 @@ var del = require('delete');
 var generator = require('./');
 var app;
 
-var cwd = path.resolve.bind(path, __dirname, 'actual');
+var actual = path.resolve.bind(path, __dirname, 'actual');
 
 function exists(name, cb) {
-  var filepath = cwd(name);
+  var filepath = actual(name);
 
   return function(err) {
     if (err) return cb(err);
@@ -27,10 +27,14 @@ function exists(name, cb) {
 describe('generate-git', function() {
   beforeEach(function() {
     app = generate({cli: true, silent: true});
-    app.cwd = cwd();
-    app.option('dest', cwd());
-    app.option('askWhen', 'not-answered');
     app.data('author.name', 'Jon Schlinkert');
+    app.option('prompt', false);
+    app.option('check-directory', false);
+    app.option('askWhen', 'not-answered');
+    app.option('dest', actual());
+    app.option('overwrite', function(file) {
+      return /actual/.test(file.path);
+    });
   });
 
   describe('plugin', function() {
@@ -54,8 +58,6 @@ describe('generate-git', function() {
       app.use(generator);
       assert(app.tasks.hasOwnProperty('default'));
       assert(app.tasks.hasOwnProperty('first-commit'));
-      assert(app.tasks.hasOwnProperty('gitattributes'));
-      assert(app.tasks.hasOwnProperty('gitignore'));
     });
 
     it('should work as a generator', function(cb) {
@@ -66,16 +68,6 @@ describe('generate-git', function() {
     it('should run the `default` task', function(cb) {
       app.register('git', generator);
       app.generate('git:default', exists('.git', cb));
-    });
-
-    it('should run the `gitignore` task', function(cb) {
-      app.register('git', generator);
-      app.generate('git:gitignore', exists('.gitignore', cb));
-    });
-
-    it('should run the `gitattributes` task', function(cb) {
-      app.register('git', generator);
-      app.generate('git:gitattributes', exists('.gitattributes', cb));
     });
 
     it('should run the `first-commit` task', function(cb) {
