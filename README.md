@@ -69,9 +69,11 @@ To see a general help menu and available commands for Generate's CLI, run:
 $ gen help
 ```
 
-## Tasks
+## Available tasks
 
-### [default](generator.js#L38)
+All available tasks for this generator.
+
+### [default](generator.js#L33)
 
 Initialize a git repository, including `git add` and first commit.
 
@@ -81,7 +83,7 @@ Initialize a git repository, including `git add` and first commit.
 $ gen git
 ```
 
-### [first-commit](generator.js#L51)
+### [first-commit](generator.js#L46)
 
 Alias for the default task, to provide a semantic task name when using this generator as a plugin or sub-generator.
 
@@ -91,7 +93,7 @@ Alias for the default task, to provide a semantic task name when using this gene
 $ gen git:first-commit
 ```
 
-### [clone](generator.js#L80)
+### [clone](generator.js#L75)
 
 Alias for the default task, to provide a semantic task name when using this generator as a plugin or sub-generator.
 
@@ -102,7 +104,7 @@ $ gen git:clone
 $ gen git:git-clone # aliased for API usage
 ```
 
-### [updater:prompt-git](generator.js#L111)
+### [updater:prompt-git](generator.js#L109)
 
 Prompts the user to confirm if they'd like to initialize a git repository with first [first-commit](#first-commit).
 
@@ -111,6 +113,8 @@ Prompts the user to confirm if they'd like to initialize a git repository with f
 ```sh
 $ gen updater:prompt-git
 ```
+
+Visit Generate's [documentation for tasks](https://github.com/generate/generate/blob/master/docs/tasks.md).
 
 ## Next steps
 
@@ -150,21 +154,19 @@ Answers to prompts and the user's environment can be used to determine the templ
 
 ### Related projects
 
-* [generate-license](https://www.npmjs.com/package/generate-license): Generate a license file for a GitHub project. | [homepage](https://github.com/generate/generate-license "Generate a license file for a GitHub project.")
+* [generate-license](https://www.npmjs.com/package/generate-license): Generate a license file. Choose any of the licenses supported by https://github.com/github/choosealicense.com. | [homepage](https://github.com/generate/generate-license "Generate a license file. Choose any of the licenses supported by https://github.com/github/choosealicense.com.")
 * [generate-mocha](https://www.npmjs.com/package/generate-mocha): Generate mocha test files. | [homepage](https://github.com/generate/generate-mocha "Generate mocha test files.")
 * [generate](https://www.npmjs.com/package/generate): Command line tool and developer framework for scaffolding out new GitHub projects. Generate offers the… [more](https://github.com/generate/generate) | [homepage](https://github.com/generate/generate "Command line tool and developer framework for scaffolding out new GitHub projects. Generate offers the robustness and configurability of Yeoman, the expressiveness and simplicity of Slush, and more powerful flow control and composability than either.")
 
 ### Community
 
-Are you using [Generate](https://github.com/generate/generate) in your project? Have you published a [generator](https://github.com/generate/generate/blob/master/docs/generators.md) and want to share your project with the world?
+Bigger community means more plugins, better support and more progress. Help us make Generate better by spreading the word:
 
-Here are some suggestions!
-
-* If you get like Generate and want to tweet about it, please feel free to mention `@generatejs` or use the `#generatejs` hashtag
-* Show your love by starring [Generate](https://github.com/generate/generate) and `generate-git`
-* Get implementation help on [StackOverflow](http://stackoverflow.com/questions/tagged/generate) (please use the `generatejs` tag in questions)
-* **Gitter** Discuss Generate with us on [Gitter](https://gitter.im/generate/generate)
-* If you publish an generator, thank you! To make your project as discoverable as possible, please add the keyword `generategenerator` to package.json.
+* Show your love by starring the project
+* Tweet about Generate. Mention using `@generatejs`, or use the `#generatejs` hashtag
+* Get implementation help on [StackOverflow](http://stackoverflow.com/questions/tagged/generate) with the `generatejs` tag
+* Discuss Generate with us on [Gitter](https://gitter.im/generate/generate)
+* If you publish a generator, to make your project as discoverable as possible, please add the unique keyword `generategenerator` to your project's package.json.
 
 ### Contributing
 
@@ -182,14 +184,15 @@ $ npm install && npm test
 
 **Jon Schlinkert**
 
-* [github/jonschlinkert](https://github.com/jonschlinkert)
-* [twitter/jonschlinkert](https://twitter.com/jonschlinkert)
+* [LinkedIn Profile](https://linkedin.com/in/jonschlinkert)
+* [GitHub Profile](https://github.com/jonschlinkert)
+* [Twitter Profile](https://twitter.com/jonschlinkert)
 
 ### License
 
-Copyright © 2017, [Jon Schlinkert](https://github.com/jonschlinkert).
+Copyright © 2018, [Jon Schlinkert](https://github.com/jonschlinkert).
 Released under the [MIT License](LICENSE).
 
 ***
 
-_This file was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.6.0, on May 05, 2017._
+_This file was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.6.0, on March 11, 2018._

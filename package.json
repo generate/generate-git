@@ -76,13 +76,6 @@
     "yeoman",
     "yo"
   ],
-  "lintDeps": {
-    "devDependencies": {
-      "files": [
-        "f*.js"
-      ]
-    }
-  },
   "verb": {
     "layout": "generator",
     "tasks": [
@@ -102,10 +95,7 @@
       "assemble",
       "base",
       "generate",
-      "generate-dest",
-      "gulp",
-      "verb",
-      "verb-readme-generator"
+      "gulp"
     ],
     "lint": {
       "reflinks": true
