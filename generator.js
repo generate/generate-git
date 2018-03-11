@@ -1,29 +1,24 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var Enquirer = require('enquirer');
-var extend = require('extend-shallow');
-var utils = require('./utils');
+const fs = require('fs');
+const path = require('path');
+const Enquirer = require('enquirer');
+const isValid = require('is-valid-app');
+const camelcase = require('camel-case');
+const firstCommit = require('gfc');
+const clone = require('gh-clone');
 
 module.exports = function(app, base) {
-  if (!utils.isValid(app, 'generate-git')) return;
+  if (!isValid(app, 'generate-git')) return;
 
   /**
    * Initialize prompts
    */
 
-  var enquirer = new Enquirer();
+  const enquirer = new Enquirer();
   enquirer.register('confirm', require('prompt-confirm'));
-
-  enquirer.question('clone', {
-    message: 'Which repo would you like to clone (owner/name)?',
-  });
-
-  enquirer.question('first-commit', {
-    message: 'Want to do first git commit?',
-    type: 'confirm'
-  });
+  enquirer.question('clone', { message: 'Which repo would you like to clone (owner/name)?' });
+  enquirer.question('first-commit', { message: 'Want to do first git commit?', type: 'confirm' });
 
   /**
    * Initialize a git repository, including `git add` and first commit.
@@ -35,7 +30,7 @@ module.exports = function(app, base) {
    * @api public
    */
 
-  app.task('default', {silent: true}, ['first-commit']);
+  app.task('default', { silent: true }, ['first-commit']);
 
   /**
    * Alias for the default task, to provide a semantic task name when using this
@@ -55,7 +50,7 @@ module.exports = function(app, base) {
       return;
     }
 
-    utils.firstCommit(app.cwd, 'first commit', function(err) {
+    firstCommit(app.cwd, function(err) {
       if (err && !/Command failed/.test(err.message)) {
         cb(err);
       } else {
@@ -79,22 +74,25 @@ module.exports = function(app, base) {
 
   app.task('clone', ['prompt-clone']);
   app.task('prompt-clone', function(cb) {
-    var opts = extend({}, app.options);
+    const opts = Object.assign({}, app.options);
+
+    // if defined on options, clone now
     if (opts.clone) {
       opts.repo = opts.clone;
-      utils.clone(opts, cb);
+      clone(opts, cb);
       return;
     }
 
-    return enquirer.ask('clone')
-      .then(function(answer) {
-        if (answer.clone) {
-          opts.repo = answer.clone;
-          app.log.info('cloning', opts.repo);
-          utils.clone(opts, cb);
-        }
-      });
-
+    // prompt the user for repo to clone
+    enquirer.ask('clone').then(function(answer) {
+      if (answer.clone) {
+        opts.repo = answer.clone;
+        app.log.info('cloning', opts.repo);
+        clone(opts, cb);
+      } else {
+        cb();
+      }
+    });
   });
 
   /**
@@ -109,14 +107,12 @@ module.exports = function(app, base) {
    */
 
   app.task('prompt-first-commit', function(cb) {
-    var name = this.name;
-    return enquirer.ask(name)
-      .then(function(answer) {
-        if (answer[name]) {
-          return app.build(name.replace('prompt-', ''), cb);
-        }
-      });
+    enquirer.ask(name).then(answer => {
+      if (answer[this.name]) {
+        app.build(this.name.replace('prompt-', ''), cb);
+      } else {
+        cb();
+      }
+    });
   });
-
 };
-
