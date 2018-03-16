@@ -54,7 +54,7 @@ module.exports = function(app, base) {
       if (err && !/Command failed/.test(err.message)) {
         cb(err);
       } else {
-        app.log.success('first commit');
+        !app.option('silent') && app.log.success('first commit');
         cb();
       }
     });
